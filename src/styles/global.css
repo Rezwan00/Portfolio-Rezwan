@@ -1,0 +1,16 @@
+/* All web fonts are bundled locally by Vite; no third-party font requests. */
+@import './fonts.css';
+@import './tokens.css';
+@import './reset.css';
+@import './typography.css';
+@import './utilities.css';
+
+body {
+  background: var(--color-black);
+  color: var(--color-text-on-dark);
+}
+
+::selection {
+  background: var(--color-purple);
+  color: var(--color-black);
+}

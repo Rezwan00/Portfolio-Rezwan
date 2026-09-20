@@ -1,0 +1,14 @@
+.hero-artwork { position: relative; width: 100%; height: 100%; isolation: isolate; }
+.hero-artwork__fallback,
+.hero-artwork__enhanced { position: absolute; inset: 0; transition: opacity 550ms var(--ease-out); }
+.hero-artwork__fallback { z-index: 2; opacity: 1; }
+.hero-artwork__enhanced { z-index: 1; opacity: 0; }
+.hero-artwork--ready .hero-artwork__fallback { opacity: 0; }
+.hero-artwork--ready .hero-artwork__enhanced { opacity: 1; }
+.hero-artwork--failed .hero-artwork__fallback { transition: none; }
+.hero-artwork__canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero-artwork__canvas canvas { pointer-events: none; }
+.hero-artwork__foreground { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-artwork__fallback, .hero-artwork__enhanced { transition: none; }
+}

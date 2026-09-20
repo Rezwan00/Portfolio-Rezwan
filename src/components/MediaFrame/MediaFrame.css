@@ -1,0 +1,27 @@
+.media-frame {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: var(--media-aspect-ratio);
+  overflow: hidden;
+  border-radius: var(--media-radius);
+  background: var(--surface-raised);
+}
+
+.media-frame > :is(img, video, picture),
+.media-frame > picture > img {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--media-fit);
+}
+
+.media-frame > .visual-placeholder {
+  height: 100%;
+  aspect-ratio: auto !important;
+  border-radius: inherit;
+}
+
+/* Preserve a visible inset focus ring on future interactive media. */
+.media-frame :focus-visible {
+  outline-offset: calc(-1 * (var(--focus-offset) + var(--focus-width)));
+}

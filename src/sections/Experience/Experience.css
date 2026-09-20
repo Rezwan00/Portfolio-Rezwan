@@ -1,0 +1,56 @@
+.experience {
+  position: relative;
+  scroll-margin-block-start: 0;
+  padding-block: var(--space-8);
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.experience__intro { margin-block-end: var(--space-7); }
+.experience__eyebrow { margin-block-end: var(--space-5); color: var(--muted); }
+.experience__title {
+  font-size: clamp(2rem, 8.2vw, 8rem);
+  line-height: 0.98;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.experience__statement { max-width: 38ch; margin-block-start: var(--space-5); color: var(--muted); }
+.experience__list, .experience__disciplines { list-style: none; padding: 0; }
+.experience__item { padding-block: var(--space-6); border-block-start: var(--border-dark); }
+.experience__item:last-child { border-block-end: var(--border-dark); }
+.experience__row { display: grid; gap: var(--space-5); }
+.experience__row > * { min-width: 0; }
+.experience__index { color: var(--muted); }
+.experience__company {
+  font-size: clamp(1.35rem, 5.6vw, 2.5rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.experience__role { margin-block-start: var(--space-3); font-size: var(--text-small); }
+.experience__period { margin-block-start: var(--space-2); color: var(--muted); }
+.experience__disciplines { display: grid; align-content: start; gap: var(--space-2); color: var(--muted); font-size: var(--text-label); }
+.experience__description { max-width: 64ch; color: var(--muted); font-size: var(--text-small); line-height: 1.7; }
+
+/* Tablet keeps the identity broad, with disciplines and description below. */
+@media (min-width: 768px) {
+  .experience__row { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-4); }
+  .experience__index { grid-column: 1; grid-row: 1 / 3; padding-block-start: var(--space-1); }
+  .experience__identity { grid-column: 2 / -1; }
+  .experience__company { font-size: clamp(1.75rem, 2.4vw, 2.5rem); }
+  .experience__disciplines { grid-column: 2 / 6; }
+  .experience__description { grid-column: 6 / -1; }
+}
+
+/* Desktop reads as an index: number, career context, then curated disciplines. */
+@media (min-width: 1200px) {
+  .experience__intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-4); }
+  .experience__eyebrow { grid-column: 1 / -1; }
+  .experience__title { grid-column: 1 / 10; }
+  .experience__statement { grid-column: 10 / -1; align-self: end; margin: 0; font-size: var(--text-small); }
+  .experience__row { row-gap: var(--space-4); }
+  .experience__identity, .experience__description { grid-column: 2 / 8; }
+  .experience__identity { grid-row: 1; }
+  .experience__description { grid-row: 2; }
+  .experience__disciplines { grid-column: 9 / -1; grid-row: 1 / 3; padding-block-start: var(--space-1); }
+}

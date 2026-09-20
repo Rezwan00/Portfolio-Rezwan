@@ -1,0 +1,116 @@
+:root {
+  /* Palette */
+  --color-black: #050505;
+  --color-black-soft: #0b0b0b;
+  --color-white: #f5f5f2;
+  --color-white-pure: #fff;
+  --color-text-on-dark: #f5f5f2;
+  --color-text-on-light: #111;
+  --color-muted-dark: #a4a4a4;
+  --color-muted-light: #666;
+  --color-border-dark: rgb(255 255 255 / 18%);
+  --color-border-dark-subtle: rgb(255 255 255 / 10%);
+  --color-border-light: rgb(5 5 5 / 18%);
+  --color-border-light-subtle: rgb(5 5 5 / 10%);
+  --color-purple: #8b5cf6;
+  --color-magenta: #d946ef;
+  --color-pink: #ff4fd8;
+  --gradient-accent: linear-gradient(135deg, #8b5cf6 0%, #d946ef 50%, #ff4fd8 100%);
+
+  /* Archivo Black ships its black design at font-weight 400. */
+  --font-display: 'Archivo Black', 'Arial Black', sans-serif;
+  --font-body: 'Inter Variable', Inter, system-ui, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+  --font-weight-display: 400;
+  --text-display-xl: clamp(4.5rem, 12vw, 11rem);
+  --text-display-lg: clamp(3.5rem, 9vw, 8rem);
+  --text-display-md: clamp(2.75rem, 6vw, 5.5rem);
+  --text-h1: clamp(3rem, 7vw, 6.5rem);
+  --text-h2: clamp(2.25rem, 5vw, 4.5rem);
+  --text-h3: clamp(1.5rem, 3vw, 2.5rem);
+  --text-body-lg: clamp(1.1rem, 1.4vw, 1.35rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: clamp(0.75rem, 0.8vw, 0.8rem);
+  --leading-display: 0.92;
+  --leading-heading: 1.05;
+  --leading-body: 1.65;
+  --tracking-display: -0.055em;
+  --tracking-heading: -0.04em;
+  --tracking-label: 0.1em;
+
+  /* Layout: CSS media-query conventions are documented in utilities.css. */
+  --content-max-width: 1600px;
+  --content-wide-max-width: 1840px;
+  --page-padding-mobile: 20px;
+  --page-padding: clamp(var(--page-padding-mobile), 4vw, 72px);
+  --section-space: clamp(96px, 13vw, 220px);
+  --section-space-small: clamp(64px, 8vw, 140px);
+  --content-gap: clamp(24px, 4vw, 64px);
+  --grid-gap: clamp(16px, 2vw, 32px);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 160px;
+  --space-12: 220px;
+
+  --radius-xs: 6px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --radius-pill: 999px;
+
+  --border-dark: 1px solid var(--color-border-dark);
+  --border-dark-subtle: 1px solid var(--color-border-dark-subtle);
+  --border-light: 1px solid var(--color-border-light);
+  --border-light-subtle: 1px solid var(--color-border-light-subtle);
+  --shadow-soft: 0 4px 16px rgb(5 5 5 / 6%);
+  --shadow-medium: 0 12px 32px rgb(5 5 5 / 10%);
+
+  --duration-fast: 180ms;
+  --duration-medium: 350ms;
+  --duration-slow: 700ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --focus-color: var(--color-purple);
+  --focus-width: 2px;
+  --focus-offset: 4px;
+}
+
+:root,
+.theme-dark {
+  color-scheme: dark;
+  --surface: var(--color-black);
+  --surface-raised: var(--color-black-soft);
+  --foreground: var(--color-text-on-dark);
+  --muted: var(--color-muted-dark);
+  --border-color: var(--color-border-dark);
+  --border-subtle: var(--color-border-dark-subtle);
+  --contrast-surface: var(--color-white);
+  --contrast-text: var(--color-text-on-light);
+}
+
+.theme-light {
+  color-scheme: light;
+  --surface: var(--color-white);
+  --surface-raised: var(--color-white-pure);
+  --foreground: var(--color-text-on-light);
+  --muted: var(--color-muted-light);
+  --border-color: var(--color-border-light);
+  --border-subtle: var(--color-border-light-subtle);
+  --contrast-surface: var(--color-black);
+  --contrast-text: var(--color-text-on-dark);
+}

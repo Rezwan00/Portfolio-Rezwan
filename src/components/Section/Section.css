@@ -1,0 +1,13 @@
+.section {
+  position: relative;
+  min-width: 0;
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.section--default { padding-block: var(--section-space); }
+.section--compact { padding-block: var(--section-space-small); }
+.section--none { padding-block: 0; }
+.section--overflow-visible { overflow: visible; }
+.section--overflow-hidden { overflow: hidden; }
+.section--overflow-clip { overflow: clip; }

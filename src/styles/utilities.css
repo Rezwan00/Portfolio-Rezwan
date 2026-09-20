@@ -1,0 +1,68 @@
+/* Mobile-first conventions:
+   480px: small-screen refinements; 768px: tablet (8 columns);
+   992px: desktop composition (12 columns); 1200px: large desktop;
+   1440px: wide desktop. Use only the breakpoints a layout needs.
+   CSS variables intentionally do not represent media-query thresholds. */
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--page-padding);
+}
+
+.container--wide {
+  max-width: var(--content-wide-max-width);
+}
+
+.container--full {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--grid-gap);
+}
+
+.editorial-grid > * {
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .editorial-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+
+@media (min-width: 992px) {
+  .editorial-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-link {
+  text-decoration-line: underline;
+  text-decoration-color: var(--border-color);
+  transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+  .text-link:hover { text-decoration-color: currentColor; }
+}
+
+.text-link:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+.text-link:active {
+  text-decoration-color: var(--color-purple);
+  text-decoration-thickness: 2px;
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "source": "Rayleigh.png",
+    "source_sha256": "ed0e75ffb4044e5e6cffbd167172e9a3e00dca57d3edd3f8986a9b2811061c3c",
+    "source_bytes": 1758766,
+    "output": "rayleigh.webp",
+    "width": 2537,
+    "height": 892,
+    "output_bytes": 242192,
+    "variants": [
+      {
+        "width": 960,
+        "height": 338,
+        "bytes": 53918
+      },
+      {
+        "width": 1600,
+        "height": 563,
+        "bytes": 120796
+      }
+    ]
+  },
+  {
+    "source": "mvtrx-site.png",
+    "source_sha256": "701a59ed5c3ff93db9d1c32e94870864e1de9e8ea8334335e9b74602a7dc35ef",
+    "source_bytes": 1454667,
+    "output": "mvtrx-site.webp",
+    "width": 2526,
+    "height": 1296,
+    "output_bytes": 95196,
+    "variants": [
+      {
+        "width": 960,
+        "height": 493,
+        "bytes": 15178
+      },
+      {
+        "width": 1600,
+        "height": 821,
+        "bytes": 40790
+      }
+    ]
+  },
+  {
+    "source": "exchange.png",
+    "source_sha256": "f801c40c346138db735ef363c23f4b8d14395aa2ce11b187c620a1492870f1a3",
+    "source_bytes": 423776,
+    "output": "mvtrx-exchange.webp",
+    "width": 2556,
+    "height": 1302,
+    "output_bytes": 247320,
+    "variants": [
+      {
+        "width": 960,
+        "height": 489,
+        "bytes": 63618
+      },
+      {
+        "width": 1600,
+        "height": 815,
+        "bytes": 133262
+      }
+    ]
+  },
+  {
+    "source": "lightningchart.png",
+    "source_sha256": "17a5fc7e574598c8c59308426923b6419f7d1a294b50410357a193fd62f16f5d",
+    "source_bytes": 1582666,
+    "output": "lightningchart.webp",
+    "width": 2532,
+    "height": 1300,
+    "output_bytes": 293338,
+    "variants": [
+      {
+        "width": 960,
+        "height": 493,
+        "bytes": 69150
+      },
+      {
+        "width": 1600,
+        "height": 821,
+        "bytes": 159852
+      }
+    ]
+  },
+  {
+    "source": "dashtera.png",
+    "source_sha256": "36a5c60f08f4529bb07c626bb202753f8367fa26b5bb424956e4b4ba08c602d7",
+    "source_bytes": 1031835,
+    "output": "dashtera.webp",
+    "width": 2541,
+    "height": 1127,
+    "output_bytes": 201450,
+    "variants": [
+      {
+        "width": 960,
+        "height": 426,
+        "bytes": 49562
+      },
+      {
+        "width": 1600,
+        "height": 710,
+        "bytes": 106158
+      }
+    ]
+  },
+  {
+    "source": "sorrento-restaurant.png",
+    "source_sha256": "cc05eb78978925b54aea09c364eb9e9e0b8da89ca9431e26570e0ccfdf269c4a",
+    "source_bytes": 3164014,
+    "output": "sorrento.webp",
+    "width": 2540,
+    "height": 1121,
+    "output_bytes": 411770,
+    "variants": [
+      {
+        "width": 960,
+        "height": 424,
+        "bytes": 106098
+      },
+      {
+        "width": 1600,
+        "height": 706,
+        "bytes": 236806
+      }
+    ]
+  },
+  {
+    "source": "alexis-dindal.png",
+    "source_sha256": "3cabf88a68dafa898c225dba354e07bafde4a16377d63ec6cb7f4445c6b421d9",
+    "source_bytes": 2710218,
+    "output": "alexis-dindal.webp",
+    "width": 2542,
+    "height": 1302,
+    "output_bytes": 229812,
+    "variants": [
+      {
+        "width": 960,
+        "height": 492,
+        "bytes": 72524
+      },
+      {
+        "width": 1600,
+        "height": 820,
+        "bytes": 134184
+      }
+    ]
+  },
+  {
+    "source": "xorbix.png",
+    "source_sha256": "98031f93372be3338bb083b0423bd0cb6c59fd1845ab3ffe177997caac6b173c",
+    "source_bytes": 1973433,
+    "output": "xorbix.webp",
+    "width": 2542,
+    "height": 1302,
+    "output_bytes": 176378,
+    "variants": [
+      {
+        "width": 960,
+        "height": 492,
+        "bytes": 58686
+      },
+      {
+        "width": 1600,
+        "height": 820,
+        "bytes": 111066
+      }
+    ]
+  }
+]

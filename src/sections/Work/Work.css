@@ -1,0 +1,120 @@
+.work {
+  position: relative;
+  scroll-margin-block-start: 0;
+  /* The trailing edge is trimmed ~18-20% versus the top: enough to stop the
+     page from reading as finished before Experience arrives, without
+     touching the showcases' own internal spacing. */
+  padding-block: var(--section-space-small) clamp(40px, 5.5vw, 100px);
+  background: var(--surface);
+  color: var(--foreground);
+}
+.work__intro { margin-block-end: var(--section-space-small); }
+.work__eyebrow { padding-block-end: var(--space-5); border-block-end: var(--border-dark); }
+.work__title {
+  margin-block-start: var(--space-7);
+  font-size: clamp(2.5rem, 13.5vw, 11rem);
+  line-height: 0.94;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+.work__title-mask,
+.project__title-mask { display: block; padding-block: 0.09em; margin-block: -0.09em; }
+.work__title-mask > span,
+.project__title-mask > span { display: block; white-space: nowrap; }
+.work__title-mask--offset { margin-inline-start: 20%; }
+.work__statement { max-width: 36ch; margin-block-start: var(--space-6); font-size: var(--text-body-lg); color: var(--muted); }
+
+.showcase { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-7); padding-block-start: var(--space-6); border-block-start: var(--border-dark); }
+.showcase + .showcase { margin-block-start: var(--section-space); }
+/* The professional chapters breathe; the client gallery turns more quickly. */
+.showcase + .showcase--web { margin-block-start: var(--section-space-small); }
+.showcase--lightning { row-gap: var(--space-6); }
+.showcase > *, .ecosystem > *, .web-entry > * { min-width: 0; }
+.showcase__index { color: var(--muted); }
+.showcase__title { margin-block-start: var(--space-5); font-size: clamp(2rem, 10vw, 6.5rem); line-height: 0.98; letter-spacing: var(--tracking-display); text-transform: uppercase; }
+.showcase__subtitle { margin-block-start: var(--space-5); font-size: var(--text-body-lg); }
+.showcase__info { display: grid; gap: var(--space-5); max-width: 40ch; }
+.showcase__info dt { margin-block-end: var(--space-2); color: var(--muted); font-size: 0.65rem; }
+.showcase__info dd { font-size: var(--text-small); line-height: 1.7; }
+.showcase__info > div + div dd { color: var(--muted); }
+.showcase--lightning .showcase__title { font-size: clamp(1.45rem, 7.4vw, 6rem); }
+.showcase--web .showcase__title { font-size: clamp(1.3rem, 6.8vw, 4.75rem); }
+.showcase--web .showcase__subtitle { max-width: 44ch; color: var(--muted); }
+
+/* Each screenshot keeps its source ratio. Motion wrappers change only paint,
+   and captions travel with their own image rather than overlapping copy. */
+.project-visual { width: 100%; min-width: 0; }
+.project__media-depth { width: 100%; }
+.project__media { position: relative; overflow: hidden; border: var(--border-dark-subtle); background: var(--color-black-soft); }
+.project__media-reveal img,
+.project__media-reveal video { display: block; width: 100%; height: auto; }
+.project__media-curtain { display: none; position: absolute; inset: 0; background: var(--color-black); transform-origin: center top; pointer-events: none; }
+.project-visual__caption { margin-block-start: var(--space-3); color: var(--muted); font-size: 0.65rem; letter-spacing: 0.06em; }
+.project__media :focus-visible { outline-offset: -6px; }
+/* Present the Xorbix hero, leaving its captured cookie notice/next section out
+   of the frame. The full, unaltered screenshot remains in the WebP asset. */
+.project-visual--hero-crop .project__media { aspect-ratio: 2.6 / 1; }
+.project-visual--hero-crop .project__media-reveal { height: 100%; }
+.project-visual--hero-crop img { height: 100%; object-fit: cover; object-position: center top; }
+
+.ecosystem { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+.web-gallery { display: grid; gap: clamp(var(--space-7), 6vw, var(--space-9)); }
+.web-entry { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+.web-entry__info { display: grid; gap: var(--space-3); min-width: 0; }
+.web-entry--sorrento .project__media { border: 0; }
+.web-entry__title { font-size: clamp(1.5rem, 7vw, 3rem); line-height: 1.05; text-transform: uppercase; letter-spacing: var(--tracking-heading); }
+.web-entry__metadata { color: var(--muted); font-size: var(--text-small); line-height: 1.8; }
+.web-entry__metadata > div:first-child { color: var(--foreground); margin-block-end: var(--space-2); }
+
+/* Tablet: broad screenshots, deliberate offsets, no narrow floating layers. */
+@media (min-width: 768px) {
+  .work__statement { margin-inline-start: 50%; }
+  .showcase { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-4); }
+  .showcase__heading { grid-column: 1 / -1; }
+  .showcase__info { grid-column: 1 / -1; }
+  .showcase--rayleigh .showcase__info { grid-template-columns: 1fr 1fr; max-width: none; column-gap: var(--space-8); }
+  .ecosystem { grid-column: 1 / -1; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-7) var(--space-4); }
+  .ecosystem__website { grid-column: 1 / -1; }
+  .ecosystem__exchange { grid-column: 3 / -1; }
+  .ecosystem__origin { grid-column: 1 / 11; }
+  .technical__website { grid-column: 2 / -1; }
+  .showcase--lightning .showcase__info { grid-column: 2 / 10; grid-template-columns: 1fr 1fr; max-width: none; gap: var(--space-7); }
+  .technical__platform { grid-column: 1 / 12; }
+  .web-gallery { grid-column: 1 / -1; }
+  .web-entry { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-4); }
+  .web-entry__info { grid-column: 1 / -1; display: flex; align-items: end; justify-content: space-between; gap: var(--space-6); }
+  .web-entry__metadata { flex-shrink: 0; }
+  .web-entry__image { grid-column: 1 / -1; }
+  .web-entry--alexis .web-entry__image, .web-entry--alexis .web-entry__info { grid-column: 3 / -1; }
+  .web-entry--xorbix .web-entry__info { grid-column: 1 / 12; }
+  .web-entry--xorbix .web-entry__image { grid-column: 1 / 12; }
+}
+
+@media (min-width: 1200px) {
+  .work__intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-4); }
+  .work__eyebrow { grid-column: 1 / -1; }
+  .work__title { grid-column: 1 / 10; margin-block-start: var(--space-8); font-size: clamp(7rem, 11.8vw, 11rem); }
+  .work__statement { grid-column: 10 / -1; align-self: end; margin: 0 0 var(--space-2); }
+  .showcase__title { font-size: clamp(4rem, 5.8vw, 6.5rem); }
+  .showcase--rayleigh .showcase__heading { grid-column: 1 / 8; }
+  .showcase--rayleigh .showcase__info { grid-column: 9 / -1; align-self: end; grid-template-columns: minmax(0, 1fr); }
+  .ecosystem { row-gap: 0; margin-block-start: var(--space-5); }
+  .ecosystem__website { grid-column: 3 / 12; grid-row: 1; }
+  /* Exchange overlaps only the lower-right space, keeping the cube readable. */
+  .ecosystem__exchange { grid-column: 7 / -1; grid-row: 2; z-index: 2; margin-block-start: calc(-1 * var(--space-8)); }
+  .ecosystem__origin { grid-column: 1 / 6; grid-row: 2; align-self: end; margin-block-start: var(--space-7); }
+  .showcase--lightning .showcase__title { font-size: clamp(3.5rem, 5.4vw, 6rem); }
+  .showcase--lightning .showcase__info { grid-column: 1 / 4; grid-row: 2; align-self: center; grid-template-columns: minmax(0, 1fr); }
+  .technical__website { grid-column: 5 / -1; grid-row: 2; }
+  .technical__platform { grid-column: 1 / 9; grid-row: 3; }
+  .showcase--web .showcase__title { font-size: clamp(3rem, 4.8vw, 4.75rem); }
+  .web-entry__title { font-size: clamp(2rem, 2.7vw, 3rem); }
+  .web-entry--sorrento .web-entry__image { grid-column: 2 / -1; grid-row: 1; }
+  .web-entry--sorrento .web-entry__info { grid-column: 2 / -1; grid-row: 2; align-items: start; }
+  .web-entry--alexis .web-entry__info { grid-column: 2 / 5; grid-row: 1; }
+  .web-entry--alexis .web-entry__image { grid-column: 6 / -1; grid-row: 1; }
+  .web-entry--xorbix .web-entry__image { grid-column: 1 / 9; grid-row: 1; }
+  .web-entry--xorbix .web-entry__info { grid-column: 9 / -1; grid-row: 1; }
+  .web-entry--alexis .web-entry__info,
+  .web-entry--xorbix .web-entry__info { display: grid; align-self: center; gap: var(--space-5); }
+}

@@ -1,0 +1,26 @@
+/* Self-hosted, Latin WOFF2 assets from Fontsource (OFL-1.1).
+   These declarations are centralized; Vite fingerprints and bundles the files.
+   Add language subsets here when portfolio content requires them. */
+@font-face {
+  font-family: 'Archivo Black';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-italic.woff2') format('woff2');
+}

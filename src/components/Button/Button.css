@@ -1,0 +1,51 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  max-width: 100%;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.button__label { min-width: 0; overflow-wrap: anywhere; }
+.button__icon { flex-shrink: 0; font-size: 1.25em; line-height: 1; }
+.button__icon > svg { width: 1em; height: 1em; }
+
+.button--small { min-height: 44px; padding: var(--space-2) var(--space-4); }
+.button--large { min-height: 56px; padding: var(--space-4) var(--space-6); font-size: var(--text-body); }
+
+.button--primary { background: var(--contrast-surface); color: var(--contrast-text); }
+.button--secondary { background: var(--surface-raised); color: var(--foreground); border-color: var(--border-subtle); }
+.button--outline { background: transparent; color: var(--foreground); border-color: var(--border-color); }
+.button--text { background: transparent; color: var(--foreground); border-radius: var(--radius-xs); padding-inline: var(--space-2); }
+
+@media (hover: hover) {
+  .button--primary:hover:not(:disabled, [aria-disabled='true']) { background: var(--surface); color: var(--foreground); border-color: var(--foreground); }
+  .button--secondary:hover:not(:disabled, [aria-disabled='true']),
+  .button--outline:hover:not(:disabled, [aria-disabled='true']) { border-color: var(--foreground); }
+  .button--text:hover:not(:disabled, [aria-disabled='true']) .button__label { text-decoration: underline; text-underline-offset: 0.25em; }
+}
+
+.button:active:not(:disabled, [aria-disabled='true']) { border-color: var(--color-purple); }
+.button--text:active:not(:disabled, [aria-disabled='true']) .button__label { text-decoration: underline; text-decoration-color: var(--color-purple); }
+
+.button:disabled,
+.button[aria-disabled='true'] { opacity: 0.45; }
+
+@media (forced-colors: active) {
+  .button { border-color: ButtonText; }
+  .button:disabled, .button[aria-disabled='true'] { color: GrayText; border-color: GrayText; opacity: 1; }
+}

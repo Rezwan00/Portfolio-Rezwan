@@ -1,0 +1,13 @@
+.rq-brand {
+  display: inline-block;
+  flex-shrink: 0;
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-display);
+  letter-spacing: -0.065em;
+  line-height: 1;
+}
+
+.rq-brand--small { font-size: 1.5rem; }
+.rq-brand--medium { font-size: 2.5rem; }
+.rq-brand--large { font-size: clamp(4rem, 8vw, 7rem); }

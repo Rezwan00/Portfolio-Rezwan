@@ -1,0 +1,16 @@
+.visual-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+  width: 100%;
+  min-width: 0;
+  padding: clamp(var(--space-5), 3vw, var(--space-7));
+  background: var(--surface-raised);
+  color: var(--foreground);
+  border: 1px solid var(--border-color);
+}
+
+.visual-placeholder__meta { color: var(--muted); }
+.visual-placeholder__label { max-width: 32ch; overflow-wrap: anywhere; }

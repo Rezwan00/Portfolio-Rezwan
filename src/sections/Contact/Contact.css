@@ -1,0 +1,92 @@
+.contact {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  scroll-margin-block-start: 0;
+  padding-block: var(--section-space-small);
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+/* An abstract, cropped echo of the Hero portrait's orbital ring: never the
+   portrait itself, never a second centerpiece. Static unless motion is on. */
+.contact__ring {
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -12%;
+  inset-inline-end: -20%;
+  width: clamp(280px, 46vw, 620px);
+  height: auto;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.contact__ring circle {
+  fill: none;
+  stroke: var(--color-purple);
+  stroke-width: 1;
+  stroke-dasharray: 270 910;
+  transform: rotate(-38deg);
+  transform-origin: 200px 200px;
+}
+
+.contact__eyebrow { margin-block-end: var(--space-6); color: var(--muted); }
+
+.contact__title {
+  margin: 0;
+  font-size: clamp(2.75rem, 9.5vw, 6.25rem);
+  line-height: 0.96;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+/* Mobile stacks three lines (LET'S / BUILD / SOMETHING.); from 600px the
+   first two words share a line, matching the desktop's two-line statement. */
+.contact__title-row { display: flex; flex-direction: column; }
+.contact__title-mask { display: block; padding-block: 0.08em; margin-block: -0.08em; }
+.contact__title-mask > span { display: block; white-space: nowrap; }
+
+.contact__body { display: grid; gap: var(--space-5); max-width: 36ch; margin-block-start: var(--space-7); }
+.contact__statement { color: var(--muted); font-size: var(--text-body); line-height: 1.6; }
+.contact__cta { margin-block-start: var(--space-2); }
+
+.contact__cta-link {
+  min-width: 264px;
+  min-height: 64px;
+  justify-content: space-between;
+  gap: var(--space-7);
+  font-size: var(--text-small);
+  letter-spacing: 0.035em;
+}
+
+.contact__cta-link .button__icon { font-size: 1.75rem; transition: transform 240ms var(--ease-out); }
+
+@media (hover: hover) {
+  .contact__cta-link:hover:not([aria-disabled='true']) {
+    background: var(--color-purple);
+    color: var(--color-black);
+    border-color: var(--color-purple);
+  }
+  .contact__cta-link:hover .button__icon { transform: translate(3px, -3px); }
+}
+
+.contact__cta-link:focus-visible .button__icon { transform: translate(3px, -3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .contact__cta-link:is(:hover, :focus-visible) .button__icon { transform: none; }
+}
+
+@media (min-width: 600px) {
+  .contact__title-row { flex-direction: row; column-gap: 0.28em; }
+}
+
+@media (min-width: 768px) {
+  .contact__body { max-width: 42ch; }
+}
+
+@media (min-width: 1200px) {
+  .contact__intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-4); }
+  .contact__eyebrow { grid-column: 1 / -1; }
+  .contact__title { grid-column: 1 / 9; }
+  .contact__body { grid-column: 9 / -1; align-self: end; margin-block-start: 0; max-width: none; }
+}
