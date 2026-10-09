@@ -44,6 +44,23 @@
 /* Each screenshot keeps its source ratio. Motion wrappers change only paint,
    and captions travel with their own image rather than overlapping copy. */
 .project-visual { width: 100%; min-width: 0; }
+.project__catalog-depth { width: 100%; }
+/* Incoming chapters occlude outgoing imagery, never their own copy. These
+   stacking contexts also contain a media pin during fast/reverse scrolling. */
+.showcase { position: relative; background: var(--color-black); }
+.showcase--rayleigh { z-index: 1; }
+.showcase--lightning { z-index: 2; }
+.showcase--web { z-index: 3; }
+.web-entry { position: relative; background: var(--color-black); }
+.web-entry > .web-entry__info,
+.web-entry > .project-visual {
+  /* GSAP normalizes individual translate to inline 'none' for its entrance.
+     This independent channel must survive that reset; entrance owns transform. */
+  translate: 0 var(--catalog-lift, 0px) !important;
+}
+.web-entry--sorrento { z-index: 1; }
+.web-entry--alexis { z-index: 2; }
+.web-entry--xorbix { z-index: 3; }
 .project__media-depth { width: 100%; }
 .project__media { position: relative; overflow: hidden; border: var(--border-dark-subtle); background: var(--color-black-soft); }
 .project__media-reveal img,

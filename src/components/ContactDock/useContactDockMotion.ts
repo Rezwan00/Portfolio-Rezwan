@@ -26,12 +26,23 @@ export function useContactDockMotion(scope: RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     const dock = scope.current
     const contact = document.getElementById('contact')
+    const hero = document.getElementById('top')
     if (!dock || !contact) return
-    const observer = new IntersectionObserver(
-      (entries) => { dock.dataset.hidden = String(entries[0]?.isIntersecting ?? false) },
-      { threshold: 0.15 },
-    )
+    const mobile = window.matchMedia('(max-width: 767px)')
+    let atContact = false
+    let atHero = !!hero && hero.getBoundingClientRect().bottom > 0 && hero.getBoundingClientRect().top < innerHeight
+    const update = () => { dock.setAttribute('data-hidden', String(atContact || (mobile.matches && atHero))) }
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === contact) atContact = entry.isIntersecting && entry.intersectionRatio >= 0.15
+        if (entry.target === hero) atHero = entry.isIntersecting
+      }
+      update()
+    }, { threshold: [0, 0.15] })
     observer.observe(contact)
-    return () => observer.disconnect()
+    if (hero) observer.observe(hero)
+    mobile.addEventListener('change', update)
+    update()
+    return () => { observer.disconnect(); mobile.removeEventListener('change', update) }
   }, [scope])
 }

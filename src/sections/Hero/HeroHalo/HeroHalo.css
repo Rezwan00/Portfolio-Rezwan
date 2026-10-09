@@ -9,6 +9,9 @@
 .hero-artwork__canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .hero-artwork__canvas canvas { pointer-events: none; }
 .hero-artwork__foreground { position: relative; z-index: 1; }
+/* The composite includes 46px more horizontal halo room than the cutout.
+   Preserve portrait height and center without changing the layout footprint. */
+.hero__portrait--composite { width: calc(100% * 945 / 899); max-width: none; margin-inline-start: calc(-100% * 23 / 899); }
 @media (prefers-reduced-motion: reduce) {
   .hero-artwork__fallback, .hero-artwork__enhanced { transition: none; }
 }

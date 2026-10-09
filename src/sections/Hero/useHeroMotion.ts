@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap'
+import { subscribeHeroPointer } from './heroPointer'
 
 /** A shared scope includes Header so its reveal belongs to the Hero timeline. */
 export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
@@ -98,30 +99,14 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
         const portraitRotation = gsap.quickTo(portraitLayer, 'rotation', options)
         const wordX = gsap.quickTo(wordLayer, 'x', options)
         const wordY = gsap.quickTo(wordLayer, 'y', options)
-        const move = (event: PointerEvent) => {
-          if (!entered || event.pointerType !== 'mouse') return
-          const bounds = hero.getBoundingClientRect()
-          const x = gsap.utils.clamp(-1, 1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2)
-          const y = gsap.utils.clamp(-1, 1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2)
+        removePointer = subscribeHeroPointer(hero, ({ x, y }) => {
+          if (!entered) return
           portraitX(x * 16)
           portraitY(y * 10)
           portraitRotation(x * 0.75)
           wordX(x * -5)
           wordY(y * -3)
-        }
-        const reset = () => {
-          portraitX(0); portraitY(0); portraitRotation(0); wordX(0); wordY(0)
-        }
-        hero.addEventListener('pointermove', move, { passive: true })
-        hero.addEventListener('pointerleave', reset)
-        hero.addEventListener('pointercancel', reset)
-        window.addEventListener('blur', reset)
-        removePointer = () => {
-          hero.removeEventListener('pointermove', move)
-          hero.removeEventListener('pointerleave', reset)
-          hero.removeEventListener('pointercancel', reset)
-          window.removeEventListener('blur', reset)
-        }
+        })
       }
 
       let disposed = false

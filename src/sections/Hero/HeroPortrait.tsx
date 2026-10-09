@@ -11,10 +11,9 @@ const portraits = import.meta.glob<string>('../../assets/portrait/rezwan-portrai
   eager: true, query: '?url', import: 'default',
 })
 const portraitOnly = portraits['../../assets/portrait/rezwan-portrait-only.webp']
-// The current portrait is used everywhere the halo doesn't paint its own ring:
-// mobile, reduced motion, and any WebGL/enhancement failure. The old baked-ring
-// composite only remains as a safety net if that delivery is ever missing.
-const fallbackSrc = portraitOnly ?? legacyCompositeSrc
+// The complete original artwork remains visible until both enhancement layers
+// are ready, and for every static/failure tier. Never combine it with WebGL.
+const fallbackSrc = legacyCompositeSrc
 
 export function HeroPortrait() {
   const quality = useHaloQuality()
@@ -27,10 +26,10 @@ export function HeroPortrait() {
 function FallbackPortrait() {
   return (
     <img
-      className="hero__portrait"
+      className="hero__portrait hero__portrait--composite"
       src={fallbackSrc}
       alt=""
-      width="899"
+      width="945"
       height="1020"
       draggable={false}
       loading="eager"

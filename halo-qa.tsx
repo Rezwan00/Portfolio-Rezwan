@@ -8,8 +8,8 @@ function Test() {
   const [mounted, setMounted] = useState(true)
   return <div style={{ background: '#050505', color: '#fff', minHeight: '250vh', fontFamily: 'sans-serif' }}>
     <section className="hero" style={{ height: '100vh' }}>
-      <h1>Isolated halo verification — portrait asset pending</h1>
-      <p role="status">{status}</p><output id="halo-metrics" />
+      <h1>Isolated halo verification</h1>
+      <p role="status">{status}</p>
       <button onClick={() => setMounted(!mounted)}>Toggle canvas</button>
       {['Top left', 'Top right', 'Bottom left', 'Bottom right', 'Exit'].map((label, index) => <button key={label} onClick={() => {
         const hero = host.current!.closest('.hero')!
@@ -32,7 +32,6 @@ function Test() {
       </div>
     </section>
     <p>Scroll destination</p>
-    <pre id="shader-info" />
   </div>
 }
 createRoot(document.getElementById('root')!).render(<Test />)

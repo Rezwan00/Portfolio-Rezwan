@@ -92,25 +92,14 @@ export default function HeroHaloCanvas({ host, quality, onReady, onFailure }: Pr
         const element = props.canvas as HTMLCanvasElement
         try {
           const context = element.getContext('webgl2', { alpha: true, antialias: true, powerPreference: 'low-power' })
-          if (context && document.getElementById('shader-info')) {
-            const link = context.linkProgram.bind(context)
-            context.linkProgram = (program) => {
-              link(program)
-              if (context.getProgramInfoLog(program)) {
-                const shaders = context.getAttachedShaders(program) ?? []
-                const shader = shaders.find((item) => context.getShaderParameter(item, context.SHADER_TYPE) === context.FRAGMENT_SHADER)
-                if (shader) document.getElementById('shader-info')!.textContent = context.getShaderSource(shader)
-              }
-            }
-          }
           if (context) return new WebGLRenderer({ ...props, context, alpha: true, antialias: true, powerPreference: 'low-power' })
         } catch {
           // Some blocked GPU configurations throw instead of returning null.
         }
-          onFailure()
-          // The parent unmounts this Canvas. No renderer is created (or noisy
-          // Three.js error thrown) on devices that do not support WebGL2.
-          return new Promise<WebGLRenderer>(() => {})
+        onFailure()
+        // The parent unmounts this Canvas. No renderer is created (or noisy
+        // Three.js error thrown) on devices that do not support WebGL2.
+        return new Promise<WebGLRenderer>(() => {})
       }}
     >
       <HaloLighting />

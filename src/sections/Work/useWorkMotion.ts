@@ -9,7 +9,7 @@ export function useWorkMotion(scope: RefObject<HTMLElement | null>) {
     const media = gsap.matchMedia()
     const seen = new WeakSet<Element>()
 
-    media.add({ motion: '(prefers-reduced-motion: no-preference)', desktop: '(min-width: 1200px)' }, context => {
+    media.add({ motion: '(prefers-reduced-motion: no-preference)', desktop: '(min-width: 1200px)', catalog: '(min-width: 1024px) and (min-height: 700px)' }, context => {
       if (!context.conditions!.motion) return
       const desktop = context.conditions!.desktop
       // Already-visible content needs no entrance trigger on a media rebuild.
@@ -55,6 +55,46 @@ export function useWorkMotion(scope: RefObject<HTMLElement | null>) {
       }
 
       const cleanupFocus: Array<() => void> = []
+      // Outgoing media or a compact gallery entry holds only after it has been
+      // read. Whole chapters stay in flow; no added scroll distance.
+      // Pin, catalog scale and existing image entrance each own a wrapper.
+      let catalogContext: gsap.Context | undefined
+      const buildCatalog = () => {
+        catalogContext?.revert()
+        if (!context.conditions!.catalog) return
+        catalogContext = gsap.context(() => {
+          const pairs = [
+            ['.ecosystem__website', '.ecosystem__exchange'],
+            ['.ecosystem__origin', '.showcase--lightning'],
+            ['.technical__platform', '.showcase--web'],
+            ['.web-entry--sorrento', '.web-entry--alexis'],
+            ['.web-entry--alexis', '.web-entry--xorbix'],
+          ] as const
+          for (const [outgoing, incoming] of pairs) {
+            const visual = section.querySelector<HTMLElement>(outgoing)
+            const next = section.querySelector<HTMLElement>(incoming)
+            if (!visual || !next || visual.offsetHeight > innerHeight * 0.78
+              || visual.querySelector('a, button, video, input, [tabindex]')) continue
+            const layer = visual.querySelector('.project__catalog-depth')!
+            // Measure before pinning; reading the pinned rect inside a refresh
+            // would make the duration depend on the current scroll position.
+            const gap = next.getBoundingClientRect().top - visual.getBoundingClientRect().bottom
+            const hold = Math.max(120, Math.min(320, gap + innerHeight * 0.18))
+            const handoff = gsap.timeline({
+              scrollTrigger: {
+                trigger: visual, start: 'bottom bottom-=40', end: `+=${hold}`,
+                pin: visual, pinSpacing: false, scrub: 0.35, invalidateOnRefresh: true,
+                id: `catalog-${outgoing.replace(/[^a-z0-9-]/gi, '')}`, anticipatePin: 0,
+              },
+            }).to(layer, { scale: 0.94, opacity: 0.72, transformOrigin: '50% 100%', ease: 'none', duration: 1 })
+            if (visual.matches('.web-entry')) {
+              // Lift the outgoing image AND its metadata above the advancing
+              // chapter edge. Text never gets sliced by the incoming screenshot.
+              handoff.to(visual, { '--catalog-lift': `${-Math.max(0, hold - gap + 24)}px`, ease: 'none', duration: 1 }, 0)
+            }
+          }
+        }, section)
+      }
       for (const visual of section.querySelectorAll<HTMLElement>('[data-work-visual]')) {
         const find = gsap.utils.selector(visual)
         const curtain = find('.project__media-curtain')
@@ -83,9 +123,23 @@ export function useWorkMotion(scope: RefObject<HTMLElement | null>) {
         }
       }
 
+      buildCatalog()
+      // A viewport can change without crossing a media-query boundary. Recheck
+      // fit rather than retaining a pin that has become taller than the screen.
+      let resizeTimer = 0
+      const resizeCatalog = () => {
+        window.clearTimeout(resizeTimer)
+        resizeTimer = window.setTimeout(() => { buildCatalog(); ScrollTrigger.refresh() }, 200)
+      }
+      window.addEventListener('resize', resizeCatalog)
       let disposed = false
-      void document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh() })
-      return () => { disposed = true; cleanupFocus.forEach(remove => remove()) }
+      void document.fonts.ready.then(() => { if (!disposed) { buildCatalog(); ScrollTrigger.refresh() } })
+      return () => {
+        disposed = true; cleanupFocus.forEach(remove => remove())
+        window.clearTimeout(resizeTimer)
+        window.removeEventListener('resize', resizeCatalog)
+        catalogContext?.revert()
+      }
     }, section)
     return () => media.revert()
   }, { scope })

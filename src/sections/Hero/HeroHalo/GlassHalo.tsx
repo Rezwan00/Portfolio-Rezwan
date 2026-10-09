@@ -8,13 +8,12 @@ import type { HaloQuality } from './useHaloQuality'
 
 type Props = {
   quality: HaloQuality
-  pointer: RefObject<{ x: number; y: number; lastMove: number }>
+  pointer: RefObject<{ x: number; y: number }>
 }
 
 export function GlassHalo({ quality, pointer }: Props) {
   const group = useRef<Group>(null)
   const elapsed = useRef(0)
-  const measurement = useRef({ count: 0, seconds: 0 })
   const background = useMemo(() => new Color('#08060f'), [])
   const geometry = useMemo(() => {
     const torus = new TorusGeometry(1.63, 0.155, 16, 112)
@@ -37,24 +36,15 @@ export function GlassHalo({ quality, pointer }: Props) {
     const dt = Math.min(delta, 0.05)
     elapsed.current += dt
     const t = elapsed.current
-    // Frame-rate-independent damping ≈ 0.06 per frame at 60 Hz. After a brief
-    // pointer rest, return gradually to the changing neutral orientation.
-    const idleWeight = Math.max(0, 1 - Math.max(0, performance.now() - pointer.current.lastMove - 1200) / 2400)
-    const x = pointer.current.x * idleWeight
-    const y = pointer.current.y * idleWeight
+    // The same input/rest policy drives DOM parallax. Damping remains local
+    // to the mesh; the GSAP entrance and scroll wrappers are never touched.
+    const { x, y } = pointer.current
     const damping = 3.7
-    group.current.rotation.x = MathUtils.damp(group.current.rotation.x, 1.1 + y * 0.23 + Math.sin(t * 0.21) * 0.08, damping, dt)
-    group.current.rotation.y = MathUtils.damp(group.current.rotation.y, 0.12 + x * 0.32 + Math.sin(t * 0.16) * 0.12, damping, dt)
-    group.current.rotation.z = MathUtils.damp(group.current.rotation.z, x * 0.07 + Math.sin(t * 0.13) * 0.035, damping, dt)
+    group.current.rotation.x = MathUtils.damp(group.current.rotation.x, 1.1 + y * 0.23 + Math.sin(t * 0.16) * 0.04, damping, dt)
+    group.current.rotation.y = MathUtils.damp(group.current.rotation.y, 0.12 + x * 0.32 + Math.sin(t * 0.12) * 0.06, damping, dt)
+    group.current.rotation.z = MathUtils.damp(group.current.rotation.z, x * 0.07 + Math.sin(t * 0.1) * 0.02, damping, dt)
     group.current.position.x = MathUtils.damp(group.current.position.x, x * 0.045, damping, dt)
-    group.current.position.y = MathUtils.damp(group.current.position.y, -0.05 - y * 0.035 + Math.sin(t * 0.28) * 0.018, damping, dt)
-    measurement.current.count++
-    measurement.current.seconds += delta
-    if (measurement.current.seconds >= 2) {
-      const output = document.getElementById('halo-metrics')
-      if (output) output.textContent = JSON.stringify({ fps: measurement.current.count / measurement.current.seconds, rotation: group.current.rotation.toArray(), pointer: pointer.current, frames: t, quality })
-      measurement.current = { count: 0, seconds: 0 }
-    }
+    group.current.position.y = MathUtils.damp(group.current.position.y, -0.05 - y * 0.035 + Math.sin(t * 0.2) * 0.008, damping, dt)
   })
 
   return (
