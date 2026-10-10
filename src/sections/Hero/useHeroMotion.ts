@@ -2,6 +2,7 @@ import type { RefObject } from 'react'
 import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap'
 import { setHeroInteractionEnabled, subscribeHeroPointer } from './heroPointer'
 import { createHeroMagnet } from './heroMagnet'
+import { createScrollCueMotion } from './scrollCueMotion'
 
 /** A shared scope includes Header so its reveal belongs to the Hero timeline. */
 export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
@@ -33,16 +34,14 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
       const mask = select('.hero__word-mask')
       const navigation = select(compact && window.innerWidth < 768
         ? '.site-header__menu' : '.site-header__link')
-      const arrow = gsap.to(select('.hero__scroll-arrow'), {
-        y: 4, duration: 1.1, ease: 'sine.inOut', repeat: -1, yoyo: true, paused: true,
-      })
+      const scrollCue = createScrollCueMotion(hero.querySelector<HTMLElement>('[data-hero-scroll]')!)
       let entered = false
       let interactive = false
       const entrance = gsap.timeline({
         defaults: { ease: 'power3.out' },
         onComplete: () => {
           entered = true
-          if (!document.hidden && hero.getBoundingClientRect().bottom > 0) arrow.play()
+          scrollCue.start()
         },
       })
 
@@ -78,10 +77,6 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
         scrollTrigger: {
           trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.5,
           invalidateOnRefresh: true,
-          onToggle: (self) => {
-            if (entered && self.isActive && !document.hidden) arrow.play()
-            else arrow.pause()
-          },
         },
       })
         .to(select('.hero__word-scroll'), { yPercent: compact ? -4 : -13 }, 0)
@@ -115,20 +110,13 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
         removeMagnet = createHeroMagnet(hero, () => entered)
       }
 
-      const pauseHiddenMotion = () => {
-        const bounds = hero.getBoundingClientRect()
-        if (!document.hidden && entered && bounds.bottom > 0 && bounds.top < innerHeight) arrow.play()
-        else arrow.pause()
-      }
-      document.addEventListener('visibilitychange', pauseHiddenMotion)
-
       let disposed = false
       // Self-hosted font metrics may settle after the first layout effect.
       void document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh() })
       return () => {
         disposed = true
         root.removeEventListener('focusin', revealForFocus)
-        document.removeEventListener('visibilitychange', pauseHiddenMotion)
+        scrollCue.destroy()
         interactive = false
         removePointer()
         setHeroInteractionEnabled(hero, false)

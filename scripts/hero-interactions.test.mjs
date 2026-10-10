@@ -54,6 +54,38 @@ function environment() {
   }
 }
 
+test('scroll cue stays running at page top and resumes without recreating its loop', () => {
+  const env = environment(), observers = [], cue = { dataset: {} }
+  const { createScrollCueMotion } = load('src/sections/Hero/scrollCueMotion.ts', {}, {
+    ...env, IntersectionObserver: class {
+      constructor(callback) { this.callback = callback; observers.push(this) }
+      observe(target) { this.target = target }
+      disconnect() { this.disconnected = true }
+    },
+  })
+  const controller = createScrollCueMotion(cue)
+  const observer = observers[0]
+  observer.callback([{ isIntersecting: true }])
+  assert.equal(cue.dataset.animating, 'false', 'wait for the parent entrance')
+  controller.start()
+  assert.equal(cue.dataset.animating, 'true')
+  env.window.dispatch('scroll')
+  assert.equal(cue.dataset.animating, 'true', 'scroll progress cannot pause a visible cue')
+  observer.callback([{ isIntersecting: false }])
+  assert.equal(cue.dataset.animating, 'false')
+  observer.callback([{ isIntersecting: true }])
+  assert.equal(cue.dataset.animating, 'true', 'reverse scrolling resumes even at scrollY zero')
+  env.document.hidden = true; env.document.dispatch('visibilitychange')
+  assert.equal(cue.dataset.animating, 'false')
+  env.document.hidden = false; env.document.dispatch('visibilitychange')
+  assert.equal(cue.dataset.animating, 'true')
+  assert.equal(observers.length, 1)
+  controller.destroy()
+  assert.equal(cue.dataset.animating, undefined)
+  assert.equal(env.document.count, 0)
+  assert.equal(observer.disconnected, true)
+})
+
 test('shared pointer gates entrance, caches input, attenuates on scroll and cleans up', () => {
   const env = environment(), hero = new Events()
   let bounds = { left: 0, top: 0, bottom: 900, width: 1440, height: 900 }
