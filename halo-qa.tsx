@@ -1,11 +1,18 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import HeroHaloCanvas from './src/sections/Hero/HeroHalo/HeroHaloCanvas'
+import { setHeroInteractionEnabled } from './src/sections/Hero/heroPointer'
 
 function Test() {
   const host = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState('Initializing')
   const [mounted, setMounted] = useState(true)
+  useEffect(() => {
+    const hero = host.current!.closest<HTMLElement>('.hero')!
+    // This isolated fixture has no GSAP entrance to release the interaction.
+    setHeroInteractionEnabled(hero, true)
+    return () => setHeroInteractionEnabled(hero, false)
+  }, [])
   return <div style={{ background: '#050505', color: '#fff', minHeight: '250vh', fontFamily: 'sans-serif' }}>
     <section className="hero" style={{ height: '100vh' }}>
       <h1>Isolated halo verification</h1>

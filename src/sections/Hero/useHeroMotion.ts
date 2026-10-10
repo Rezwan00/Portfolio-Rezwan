@@ -1,6 +1,7 @@
 import type { RefObject } from 'react'
 import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap'
-import { subscribeHeroPointer } from './heroPointer'
+import { setHeroInteractionEnabled, subscribeHeroPointer } from './heroPointer'
+import { createHeroMagnet } from './heroMagnet'
 
 /** A shared scope includes Header so its reveal belongs to the Hero timeline. */
 export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
@@ -19,6 +20,7 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
       all: 'all',
     }, (context) => {
       const { reduced, compact, pointer } = context.conditions!
+      setHeroInteractionEnabled(hero, false)
       // matchMedia reverts all inline states before rebuilding. Preference and
       // breakpoint changes settle immediately instead of replaying the entrance.
       if (reduced) {
@@ -35,11 +37,12 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
         y: 4, duration: 1.1, ease: 'sine.inOut', repeat: -1, yoyo: true, paused: true,
       })
       let entered = false
+      let interactive = false
       const entrance = gsap.timeline({
         defaults: { ease: 'power3.out' },
         onComplete: () => {
           entered = true
-          if (hero.getBoundingClientRect().bottom > 0) arrow.play()
+          if (!document.hidden && hero.getBoundingClientRect().bottom > 0) arrow.play()
         },
       })
 
@@ -55,6 +58,7 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
           opacity: 0, y: compact ? 55 : 105, scale: compact ? 0.88 : 0.8,
           rotation: compact ? 0 : 4, duration: 1.05,
         }, 0.48)
+        .call(() => { interactive = true; setHeroInteractionEnabled(hero, true) }, [], 1.53)
         .from(select('[data-hero-role]'), { opacity: 0, y: 25, duration: 0.6 }, 1.05)
         .from(select('[data-hero-statement]'), { opacity: 0, y: 18, duration: 0.6 }, 1.15)
         .from(select('[data-hero-disciplines]'), { opacity: 0, y: 15, duration: 0.55 }, 1.28)
@@ -75,7 +79,7 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
           trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.5,
           invalidateOnRefresh: true,
           onToggle: (self) => {
-            if (entered && self.isActive) arrow.play()
+            if (entered && self.isActive && !document.hidden) arrow.play()
             else arrow.pause()
           },
         },
@@ -90,6 +94,7 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
       root.addEventListener('focusin', revealForFocus)
 
       let removePointer = () => {}
+      let removeMagnet = () => {}
       if (pointer) {
         const options = { duration: 0.65, ease: 'power3.out' }
         const portraitLayer = select('.hero__visual-pointer')
@@ -100,14 +105,22 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
         const wordX = gsap.quickTo(wordLayer, 'x', options)
         const wordY = gsap.quickTo(wordLayer, 'y', options)
         removePointer = subscribeHeroPointer(hero, ({ x, y }) => {
-          if (!entered) return
+          if (!interactive) return
           portraitX(x * 16)
           portraitY(y * 10)
           portraitRotation(x * 0.75)
           wordX(x * -5)
           wordY(y * -3)
         })
+        removeMagnet = createHeroMagnet(hero, () => entered)
       }
+
+      const pauseHiddenMotion = () => {
+        const bounds = hero.getBoundingClientRect()
+        if (!document.hidden && entered && bounds.bottom > 0 && bounds.top < innerHeight) arrow.play()
+        else arrow.pause()
+      }
+      document.addEventListener('visibilitychange', pauseHiddenMotion)
 
       let disposed = false
       // Self-hosted font metrics may settle after the first layout effect.
@@ -115,7 +128,11 @@ export function useHeroMotion(scope: RefObject<HTMLDivElement | null>) {
       return () => {
         disposed = true
         root.removeEventListener('focusin', revealForFocus)
+        document.removeEventListener('visibilitychange', pauseHiddenMotion)
+        interactive = false
         removePointer()
+        setHeroInteractionEnabled(hero, false)
+        removeMagnet()
       }
     }, root)
 

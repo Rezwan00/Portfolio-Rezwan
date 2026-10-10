@@ -160,3 +160,52 @@ There are no scope deviations. The deliberate Xorbix presentation crop and
 desktop-to-tablet breakpoint at 1200px are composition choices described above.
 Review the flagship overlap and the final Xorbix crop in the local preview before
 Phase 7; no later phase was implemented.
+
+## Exhibition motion refinement
+
+The desktop motion now connects six outgoing/incoming media pairs through
+shared scrubbed timelines (`workExhibition.ts`). Incoming frames settle from
+93% scale with a 48px rise and a small lateral offset; outgoing frames recede
+to 91% with restrained translation. Arrival and departure own separate DOM
+wrappers, so forward/reverse scrolling uses the same continuous states.
+Desktop media no longer combines these movements with timed curtain reveals
+or independent image parallax. The existing introduction and text reveals stay.
+
+Individual fitting frames/compact gallery entries may hold for at most 280px
+of existing scroll, with no pin spacing. Caption text bounds limit or remove
+a hold when the incoming image/chapter would cover it. Gallery metadata lifts
+with its frame. No complete showcase is pinned, and no section spacing changes.
+Interactive media is excluded. All three compositions and eight images remain.
+
+This enhancement requires at least 1024px width and 700px height. Smaller
+layouts retain their original straightforward presentation; reduced motion
+removes every Work animation. Resize/font settling rebuilds the scoped context,
+and unmount clears the triggers. No new dependency is required.
+
+QA: nine viewports from 320×568 through 1920×1080 had no horizontal overflow.
+All six desktop handoffs returned identical transform matrices on reverse
+scroll. The local forward/reverse scroll sample averaged 59.9 FPS (16.8ms
+95th-percentile frame interval); this is not a physical-device guarantee.
+Reduced-motion emulation left no transforms, curtains or ScrollTriggers.
+Unmount left zero triggers. TypeScript, ESLint and production build passed.
+The standalone `motion-review.html` adds per-handoff controls and a reverse
+audit; the normal production build excludes that QA entry.
+
+### Final choreography pass — 2026-10-10
+
+Kept the six pairings, compositions, overlap/caption guards, movement amounts,
+pin limits and mobile/reduced-motion paths. Each frame now completes its own
+arrival and gets a short settled interval (6% of viewport height in existing
+scroll space) before receding. Arrival and departure share a measured timeline,
+with a softer arrival finish and an outgoing movement that finishes slightly
+earlier. The gallery clearance translation now tracks native scroll directly,
+so the text clearance cannot lag behind its pin during fast/reverse scrolling.
+
+TypeScript, ESLint and production build passed again. A focused check of the
+actual handoff builder with recorded geometry and real GSAP tweens verified
+arrival-before-departure ordering, identical reverse tween states, pin bounds
+and immediate clearance at viewport heights 768/900/1080. These are timing
+checks, not new browser viewport tests. Browser automation could not start
+because its local runtime failed, even after reset. Fresh visual/slow-scroll/
+fast-scroll and performance QA for this final timing change remains unverified;
+the earlier visual results above describe the preceding refinement.

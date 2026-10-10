@@ -47,15 +47,17 @@ export function Hero() {
             <span>× Product × Web</span>
           </p>
           <div className="hero__cta" data-hero-cta>
-            <LinkButton href="#contact" size="large" iconEnd="↗" className="hero__cta-link">
-              LET&apos;S TALK
-            </LinkButton>
+            <div className="hero__cta-magnet">
+              <LinkButton href="#contact" size="large" iconEnd="↗" className="hero__cta-link">
+                LET&apos;S TALK
+              </LinkButton>
+            </div>
           </div>
         </div>
 
         <div className="hero__bottom">
           <p className="hero__location label" data-hero-location>Helsinki, Finland</p>
-          {/* A visual cue only: there is no next section to navigate to yet. */}
+          {/* A visual cue; the next section follows in native document flow. */}
           <p className="hero__scroll" data-hero-scroll aria-hidden="true">
             <span className="label">Scroll</span><span className="hero__scroll-arrow">↓</span>
           </p>

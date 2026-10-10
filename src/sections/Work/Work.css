@@ -44,6 +44,7 @@
 /* Each screenshot keeps its source ratio. Motion wrappers change only paint,
    and captions travel with their own image rather than overlapping copy. */
 .project-visual { width: 100%; min-width: 0; }
+.project__arrival,
 .project__catalog-depth { width: 100%; }
 /* Incoming chapters occlude outgoing imagery, never their own copy. These
    stacking contexts also contain a media pin during fast/reverse scrolling. */

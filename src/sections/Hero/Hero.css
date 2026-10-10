@@ -112,6 +112,8 @@
 
 .hero__disciplines { line-height: 1.65; }
 
+.hero__cta-magnet { display: inline-flex; max-width: 100%; }
+
 .hero__cta-link {
   min-width: 210px;
   min-height: 64px;

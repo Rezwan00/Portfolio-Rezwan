@@ -5,10 +5,11 @@ import { MeshTransmissionMaterial } from '@react-three/drei/core/MeshTransmissio
 import { Color, MathUtils, TorusGeometry } from 'three'
 import type { Group } from 'three'
 import type { HaloQuality } from './useHaloQuality'
+import type { HeroPointer } from '../heroPointer'
 
 type Props = {
   quality: HaloQuality
-  pointer: RefObject<{ x: number; y: number }>
+  pointer: RefObject<HeroPointer>
 }
 
 export function GlassHalo({ quality, pointer }: Props) {
@@ -38,13 +39,16 @@ export function GlassHalo({ quality, pointer }: Props) {
     const t = elapsed.current
     // The same input/rest policy drives DOM parallax. Damping remains local
     // to the mesh; the GSAP entrance and scroll wrappers are never touched.
-    const { x, y } = pointer.current
-    const damping = 3.7
-    group.current.rotation.x = MathUtils.damp(group.current.rotation.x, 1.1 + y * 0.23 + Math.sin(t * 0.16) * 0.04, damping, dt)
-    group.current.rotation.y = MathUtils.damp(group.current.rotation.y, 0.12 + x * 0.32 + Math.sin(t * 0.12) * 0.06, damping, dt)
-    group.current.rotation.z = MathUtils.damp(group.current.rotation.z, x * 0.07 + Math.sin(t * 0.1) * 0.02, damping, dt)
+    const { x, y, influence } = pointer.current
+    // Roughly matches the DOM quickTo settling time, independent of frame rate.
+    // Idle drift quiets while actively tilting and as the next section arrives.
+    const damping = 5
+    const idle = influence * (1 - Math.min(1, Math.hypot(x, y)) * 0.7)
+    group.current.rotation.x = MathUtils.damp(group.current.rotation.x, 1.1 + y * 0.23 + Math.sin(t * 0.16) * 0.04 * idle, damping, dt)
+    group.current.rotation.y = MathUtils.damp(group.current.rotation.y, 0.12 + x * 0.32 + Math.sin(t * 0.12) * 0.06 * idle, damping, dt)
+    group.current.rotation.z = MathUtils.damp(group.current.rotation.z, x * 0.07 + Math.sin(t * 0.1) * 0.02 * idle, damping, dt)
     group.current.position.x = MathUtils.damp(group.current.position.x, x * 0.045, damping, dt)
-    group.current.position.y = MathUtils.damp(group.current.position.y, -0.05 - y * 0.035 + Math.sin(t * 0.2) * 0.008, damping, dt)
+    group.current.position.y = MathUtils.damp(group.current.position.y, -0.05 - y * 0.035 + Math.sin(t * 0.2) * 0.008 * idle, damping, dt)
   })
 
   return (

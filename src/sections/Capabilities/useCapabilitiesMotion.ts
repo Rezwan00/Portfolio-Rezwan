@@ -8,7 +8,6 @@ export function useCapabilitiesMotion(scope: RefObject<HTMLElement | null>) {
     const select = gsap.utils.selector(section)
     const media = gsap.matchMedia()
     let revealed = false
-    const readRows = new WeakSet<HTMLElement>()
 
     media.add({
       motion: '(prefers-reduced-motion: no-preference)',
@@ -46,12 +45,27 @@ export function useCapabilitiesMotion(scope: RefObject<HTMLElement | null>) {
       if (compact) reveal.timeScale(1.15)
 
       for (const row of select('[data-capabilities-discipline]')) {
-        if (readRows.has(row) || row.getBoundingClientRect().top < window.innerHeight * 0.95) continue
-        gsap.from(row, {
-          y: compact ? 12 : 20, opacity: 0, duration: 0.6, ease: 'power3.out',
-          onComplete: () => { readRows.add(row) },
-          scrollTrigger: { trigger: row, start: 'top 95%', once: true },
+        const term = row.querySelector('dt')
+        const description = row.querySelector('dd')
+        const number = row.querySelector('.capabilities__number')
+        const name = row.querySelector('.capabilities__name')
+        // Each row has one reversible reading window. Terms/descriptions arrive
+        // in sequence; the number and name release emphasis before the next row
+        // takes over. No pinning or opacity masks: all copy is always readable.
+        gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: row, start: 'top 82%', end: 'bottom 20%', scrub: 0.3,
+            invalidateOnRefresh: true,
+          },
         })
+          .fromTo(term, { y: compact ? 10 : 22 }, { y: 0, duration: 0.35, ease: 'power2.out' }, 0)
+          .fromTo(description, { y: compact ? 8 : 16 }, { y: 0, duration: 0.35, ease: 'power2.out' }, 0.08)
+          .fromTo(row, { '--capability-progress': 0 }, { '--capability-progress': 1, duration: 0.55 }, 0)
+          .to(number, { color: 'var(--color-purple)', duration: 0.25 }, 0.2)
+          .to(name, { x: compact ? 0 : 8, duration: 0.25, ease: 'power2.out' }, 0.2)
+          .to(number, { color: 'var(--muted)', duration: 0.35 }, 0.65)
+          .to(name, { x: 0, duration: 0.35, ease: 'power2.inOut' }, 0.65)
       }
 
       let disposed = false

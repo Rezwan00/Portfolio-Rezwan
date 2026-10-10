@@ -112,3 +112,75 @@ reduced-motion, and simple CSS hover states remain intact.
 
 The portrait/name overlap and supplied bust's lower cut edge remain unchanged.
 Any future increase in motion ranges should recheck clearance to copy and CTA.
+
+## Stage B interaction refinement — 2026-10-10
+
+The existing composition, entrance sequence/timings, scroll transforms, artwork,
+halo geometry/material/lights and navigation are retained. Work was not edited
+in this pass.
+
+- The shared pointer sampler gates DOM and WebGL input until the portrait
+  finishes its entrance (timeline time 1.53s, respecting the compact speed).
+  Newly mounted subscribers receive the current sample immediately. Portrait
+  and word ranges remain 16/10px and opposite 5/3px respectively.
+- Halo damping is frame-rate independent with a coefficient of 5, closer to
+  the existing DOM settling time. Its existing slow idle drift is attenuated
+  while following input and as Hero leaves view. It settles to neutral before
+  the offscreen Canvas pauses. No new geometry or scene was introduced.
+- The primary CTA uses a new inner `hero__cta-magnet` wrapper. Fine desktop
+  mouse input moves it at most 6px horizontally / 4px vertically, after the
+  entrance completes. The outer hit area, entrance and scroll wrappers remain
+  independent. Keyboard focus snaps it to neutral; exit/cancel, scroll, resize,
+  blur and tab hiding reset it. Mobile and reduced motion do not register it.
+- The existing original `rezwan-hero.webp` composite was already correctly used
+  for mobile, reduced motion, loading and failure states, so it is preserved.
+  SHA-256 remains `89D32EB19F9C3B1B3B34D827F8C4DE2BB211D3B3F24CE104654B28D279FB6442`.
+  Enhanced mode retains `rezwan-portrait-only.webp` with the WebGL halo.
+- The mobile dock starts hidden/inert and resolves visibility before paint,
+  removing the initial flash. It stays out of Hero until 80px beyond its edge,
+  hides immediately on reverse scroll, and removes hidden links from keyboard
+  navigation. Its existing Contact exclusion remains. Desktop keyboard focus
+  completes the dock entrance immediately. Hidden border animation pauses.
+- DPR caps, adaptive material quality, lazy loading, context-loss fallback and
+  Canvas offscreen/page-visibility pausing remain. The existing scroll arrow
+  now also pauses when the tab is hidden.
+
+### Verification and remaining limit
+
+Run `node --test scripts/hero-interactions.test.mjs` for deterministic behavior
+checks: shared input/lifecycle, CTA limits and focus reset, static quality tiers,
+real halo damping at simulated 30/60/120Hz, and dock mobile/desktop/reverse states.
+The checks execute the source with simulated DOM events and real GSAP/Three.js
+math; they do not render a browser or measure GPU FPS.
+
+TypeScript, ESLint and the normal production build pass. The existing large lazy
+Three.js chunk warning remains. No dependency was added. Browser automation
+still fails at startup with a local sandbox-helper error, so fresh responsive
+screenshots, WebGL initialization/context-loss checks, browser console and FPS
+measurements for Stage B remain unverified. Earlier visual QA above is historical.
+Use the local production preview to review this pass before deployment.
+The retained local QA entry also includes a “Hero inspect” control; it is excluded
+from normal production builds.
+
+### Final interaction quality pass — 2026-10-10
+
+No production animation or layout change was warranted by the source review and
+deterministic checks. Expanded `scripts/hero-interactions.test.mjs`; all seven
+tests pass. Added slow samples/rapid pointer reversals and queued-input exit,
+quality policy at widths 320/375/390/430/768/1024/1280/1440/1920, Canvas visibility
+and context-failure lifecycle, and actual Work GSAP tween forward/reverse/jump
+checks using simulated flow geometry at viewport heights 768/900/1024/1080.
+These are behavior checks, not rendered viewport tests or FPS measurements.
+
+TypeScript, ESLint, production build and whitespace checks pass. The production
+preview returns HTTP 200 and matches the current build. The original composite
+hash is unchanged. No production diagnostics were found; useful standalone QA
+entries remain excluded from the normal build. Work and Hero production code
+were left unchanged during this pass.
+
+Browser automation still fails before connecting because the Windows sandbox
+helper cannot start. Fresh desktop/mobile visual checks, keyboard traversal,
+layout-shift/flicker assessment, real WebGL failure appearance, browser console
+and GPU/scroll performance remain pending. The existing 939 kB (255 kB gzip)
+lazy halo chunk warning remains. The disabled mobile menu is a separate known
+usability task; navigation was not changed.

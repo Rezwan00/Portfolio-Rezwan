@@ -12,8 +12,11 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity var(--duration-medium) var(--ease-standard), visibility 0s linear var(--duration-medium);
+  /* Hide immediately so reverse scrolling cannot leave links over Hero. */
+  transition: opacity var(--duration-medium) var(--ease-standard), visibility 0s;
 }
+
+.contact-dock[data-hidden='true']::before { animation-play-state: paused; }
 
 /* The dock is narrow and tall, not square — rotating the whole ring as a
    rigid shape would tilt its corners outside the pill at some angles (it

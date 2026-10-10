@@ -1,4 +1,4 @@
-/* global document, window, URLSearchParams, Event, PointerEvent, requestAnimationFrame, performance, HTMLCanvasElement */
+/* global document, window, URLSearchParams, Event, PointerEvent, requestAnimationFrame, performance, HTMLCanvasElement, getComputedStyle, DOMMatrix */
 // Local-only review entry. Never imported by the portfolio or normal build.
 import { createRoot } from 'react-dom/client'
 import './src/styles/global.css'
@@ -53,6 +53,38 @@ button('Reverse', () => {
   const trigger = ScrollTrigger.getAll().find(t => t.vars.id === 'catalog-web-entry--sorrento')
   if (trigger) window.scrollTo(0, trigger.start - 250)
 })
+let exhibitionIndex = 0
+for (const [index, label] of ['MVTRX', 'Chapter 2', 'Charts', 'Chapter 3', 'Sorrento / Alexis', 'Alexis / Xorbix'].entries()) {
+  button(label, () => {
+    exhibitionIndex = index
+    const trigger = ScrollTrigger.getAll().filter(t => String(t.vars.id).startsWith('exhibition-'))[index]
+    if (trigger) window.scrollTo(0, trigger.start + (trigger.end - trigger.start) * 0.5)
+  })
+}
+for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
+  button(`${progress * 100}%`, () => {
+    const trigger = ScrollTrigger.getAll().filter(t => String(t.vars.id).startsWith('exhibition-'))[exhibitionIndex]
+    if (trigger) window.scrollTo(0, trigger.start + (trigger.end - trigger.start) * progress)
+  })
+}
+button('Audit exhibition', () => {
+  void (async () => {
+    const triggers = ScrollTrigger.getAll().filter(t => String(t.vars.id).startsWith('exhibition-'))
+    const results = []
+    for (const trigger of triggers) {
+      const states: number[][] = []
+      for (const progress of [0, 0.5, 1, 0.5, 0]) {
+        window.scrollTo(0, trigger.start + (trigger.end - trigger.start) * progress)
+        await new Promise(resolve => window.setTimeout(resolve, 650))
+        const layers = [...document.querySelectorAll<HTMLElement>('#work .project__arrival, #work .project__catalog-depth')]
+        states.push(layers.flatMap(el => Array.from(new DOMMatrix(getComputedStyle(el).transform).toFloat64Array())))
+      }
+      const error = Math.max(...states[0]!.map((value, i) => Math.abs(value - states[4]![i]!)), ...states[1]!.map((value, i) => Math.abs(value - states[3]![i]!)))
+      results.push({ id: trigger.vars.id, reverseMatrixError: error, overflow: document.documentElement.scrollWidth > window.innerWidth })
+      output.textContent = JSON.stringify(results)
+    }
+  })()
+})
 button('Measure scroll', () => {
   const start = performance.now()
   const times: number[] = []
@@ -68,6 +100,23 @@ button('Measure scroll', () => {
 })
 button('Inspect', () => {
   output.textContent = JSON.stringify({ reduced, triggers: ScrollTrigger.getAll().length, pins: ScrollTrigger.getAll().filter(t => t.vars.pin).length, canvas: !!document.querySelector('.hero canvas'), draws })
+})
+button('Hero inspect', () => {
+  const hero = document.querySelector('.hero')!
+  const styles = (selector: string) => {
+    const element = hero.querySelector(selector)
+    return element ? getComputedStyle(element).transform : null
+  }
+  const fallback = hero.querySelector('.hero-artwork__fallback')
+  output.textContent = JSON.stringify({
+    enhanced: !!hero.querySelector('.hero-artwork--ready'),
+    portrait: hero.querySelector<HTMLImageElement>('.hero-artwork__foreground')?.currentSrc,
+    fallback: hero.querySelector<HTMLImageElement>('.hero__portrait--composite')?.currentSrc,
+    fallbackOpacity: fallback ? getComputedStyle(fallback).opacity : '1',
+    portraitDepth: styles('.hero__visual-pointer'), wordDepth: styles('.hero__word-pointer'),
+    magnet: styles('.hero__cta-magnet'), dockHidden: document.querySelector('.contact-dock')?.getAttribute('data-hidden'),
+    dockInert: document.querySelector('.contact-dock')?.hasAttribute('inert'),
+  })
 })
 button('Pointer sweep', () => {
   const hero = document.querySelector<HTMLElement>('.hero')!

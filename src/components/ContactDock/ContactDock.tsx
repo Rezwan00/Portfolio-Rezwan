@@ -44,7 +44,7 @@ export function ContactDock() {
   useContactDockMotion(dockRef)
 
   return (
-    <div className="contact-dock" ref={dockRef}>
+    <div className="contact-dock" ref={dockRef} data-hidden="true" inert>
       <nav className="contact-dock__nav" aria-label="Contact Rezwan Qaderi">
         <a className="contact-dock__link" href={`mailto:${EMAIL}`} aria-label="Email Rezwan Qaderi">
           <span className="contact-dock__tooltip" aria-hidden="true">Email</span>
